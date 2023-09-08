@@ -250,6 +250,15 @@ Resources:
       termsAndConditions : !Ref TermsAndConditions
       mfa: !Ref MFA
   TVQSIAM01:
+    Metadata:
+      cfn-lint:
+        config:
+          ignore_checks:
+            - EIAMPolicyActionWildcard
+            - EIAMPolicyWildcardResource
+          ignore_reasons:
+            - EIAMPolicyActionWildcard: Intent assumed for initial migration.
+            - EIAMPolicyWildcardResource: Intent assumed for initial migration.
     Type: 'AWS::IAM::Role'
     Properties:
       AssumeRolePolicyDocument:
@@ -260,7 +269,7 @@ Resources:
               Service: lambda.amazonaws.com
             Action: 'sts:AssumeRole'
       ManagedPolicyArns:
-        - 'arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole'
+        - !Sub 'arn:${AWS::Partition}:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole'
       Path: /
       Policies:
       - PolicyName: logs
